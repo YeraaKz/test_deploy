@@ -24,7 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www/symfony
 WORKDIR /var/www
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
