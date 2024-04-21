@@ -26,4 +26,4 @@ RUN composer clear-cache
 CMD service nginx start && php-fpm
 
 # Открытие портов
-EXPOSE 80
+EXPOSE 80 9000
