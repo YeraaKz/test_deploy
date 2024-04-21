@@ -11,19 +11,21 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Конфигурация Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY symfony.conf /etc/nginx/sites-available/default
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
 # Копирование исходного кода приложения
-COPY ./ /var/www
 WORKDIR /var/www
+COPY ./ /var/www
 
 # Установка зависимостей через Composer
 RUN composer clear-cache
 #RUN composer install --no-dev --optimize-autoloader
 
 
-
 # Запуск Nginx и PHP-FPM при старте контейнера
-CMD service nginx start && php-fpm
+
 
 # Открытие портов
 EXPOSE 80 9000
+
+CMD service nginx start && php-fpm
