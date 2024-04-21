@@ -18,7 +18,9 @@ ENV SKIP_COMPOSER 1
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Устанавливаем Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN rm -f composer.lock
+RUN composer install --no-dev --optimize-autoloader
+
 
 # Копируем исходный код Symfony в контейнер
 COPY . /var/www/symfony
