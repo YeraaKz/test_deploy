@@ -18,7 +18,7 @@ WORKDIR /var/www
 
 # Установка зависимостей через Composer
 RUN composer clear-cache
-RUN composer install --no-dev --optimize-autoloader
+#RUN composer install --no-dev --optimize-autoloader
 
 # Настройка прав доступа
 RUN chown -R www-data:www-data /var/www/symfony
