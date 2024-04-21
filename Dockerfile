@@ -21,7 +21,9 @@ RUN composer clear-cache
 #RUN composer install --no-dev --optimize-autoloader
 
 # Настройка прав доступа
-RUN chown -R www-data:www-data /var/www/symfony
+RUN set -x ; \
+    addgroup -g 82 -S www-data ; \
+    adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
 
 # Запуск Nginx и PHP-FPM при старте контейнера
 CMD service nginx start && php-fpm
