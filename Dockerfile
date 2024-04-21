@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
         curl \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV SKIP_COMPOSER 1
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # Устанавливаем PHP расширения
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -25,9 +26,10 @@ WORKDIR /var/www
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
 
 # Устанавливаем зависимости Composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
+
 
 # Копируем конфигурацию nginx в контейнер
 COPY nginx.conf /etc/nginx/nginx.conf
