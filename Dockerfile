@@ -23,6 +23,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Копируем исходный код Symfony в контейнер
 COPY . /var/www/symfony
 WORKDIR /var/www
+
+RUN composer install --no-dev --optimize-autoloader
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
