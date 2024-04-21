@@ -37,4 +37,5 @@ RUN chown -R www-data:www-data /var/www/symfony && chmod -R 755 /var/www/symfony
 EXPOSE 80 9000
 
 # Запускаем nginx и PHP-FPM
-CMD service php8.1-fpm start && nginx -g 'daemon off;'
+CMD php-fpm -D && nginx -g 'daemon off;'
+
