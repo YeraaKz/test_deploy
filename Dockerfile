@@ -1,30 +1,39 @@
-# Базовый образ
+# Используем официальный образ PHP с FPM
 FROM php:8.1-fpm
 
-# Установка зависимостей
-RUN apt-get update && apt-get install -y nginx git unzip libicu-dev libpng-dev libonig-dev libxml2-dev libzip-dev \
-    && docker-php-ext-install pdo_mysql intl opcache gd
+# Устанавливаем зависимости
+RUN apt-get update && apt-get install -y \
+        nginx \
+        git \
+        unzip \
+        libpng-dev \
+        libonig-dev \
+        libxml2-dev \
+        zip \
+        curl \
+        && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Установка Composer
+# Устанавливаем PHP расширения
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Устанавливаем Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Конфигурация Nginx
+# Копируем исходный код Symfony в контейнер
+COPY . /var/www/symfony
+
+# Устанавливаем зависимости Composer
+RUN composer install --no-dev --optimize-autoloader -d /var/www/symfony
+
+# Копируем конфигурацию nginx в контейнер
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY symfony.conf /etc/nginx/sites-available/default
+COPY symfony.conf /etc/nginx/conf.d/
 
-# Копирование исходного кода приложения
-WORKDIR /var/www
-COPY ./ /var/www
+# Настройка прав доступа
+RUN chown -R www-data:www-data /var/www/symfony && chmod -R 755 /var/www/symfony
 
-# Установка зависимостей через Composer
-RUN composer clear-cache
-#RUN composer install --no-dev --optimize-autoloader
-
-
-# Запуск Nginx и PHP-FPM при старте контейнера
-
-
-# Открытие портов
+# Открываем порты для nginx и fpm
 EXPOSE 80 9000
 
-CMD service nginx start && php-fpm
+# Запускаем nginx и PHP-FPM
+CMD service php8.1-fpm start && nginx -g 'daemon off;'
