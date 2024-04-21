@@ -34,8 +34,11 @@ COPY symfony.conf /etc/nginx/conf.d/
 RUN chown -R www-data:www-data /var/www/symfony && chmod -R 755 /var/www/symfony
 
 # Открываем порты для nginx и fpm
-EXPOSE 80 9000
+
+RUN composer install --no-interaction
 
 # Запускаем nginx и PHP-FPM
 CMD php-fpm -D && nginx -g 'daemon off;'
+
+EXPOSE 80 9000
 
