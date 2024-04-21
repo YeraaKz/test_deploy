@@ -11,7 +11,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Конфигурация Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY symfony.conf /etc/nginx/sites-available/default
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
 # Копирование исходного кода приложения
 WORKDIR /var/www/symfony
