@@ -22,7 +22,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Копируем исходный код Symfony в контейнер
 COPY . /var/www/symfony
-
+WORKDIR /var/www
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -31,7 +31,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY symfony.conf /etc/nginx/conf.d/
 
 # Настройка прав доступа
-RUN chown -R www-data:www-data /var/www/symfony && chmod -R 755 /var/www/symfony
+RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www
 
 # Открываем порты для nginx и fpm
 EXPOSE 80 9000
