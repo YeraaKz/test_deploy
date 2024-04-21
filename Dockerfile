@@ -20,10 +20,12 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # Устанавливаем Composer
 
 # Копируем исходный код Symfony в контейнер
-COPY . /var/www
+COPY ./ /var/www
 WORKDIR /var/www
 
-RUN composer install --no-dev --optimize-autoloader
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-interaction
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
