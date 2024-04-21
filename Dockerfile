@@ -21,7 +21,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Копируем исходный код Symfony в контейнер
-COPY . /var/www/symfony
+COPY . /var/www/
+WORKDIR /var/www/
 
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
@@ -34,8 +35,6 @@ COPY symfony.conf /etc/nginx/conf.d/
 RUN chown -R www-data:www-data /var/www/symfony && chmod -R 755 /var/www/symfony
 
 # Открываем порты для nginx и fpm
-
-RUN composer install --no-interaction
 
 # Запускаем nginx и PHP-FPM
 CMD php-fpm -D && nginx -g 'daemon off;'
