@@ -26,8 +26,8 @@ WORKDIR /var/www
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader
 RUN composer require symfony/maker-bundle
+RUN composer install --no-dev --optimize-autoloader
 
 # Устанавливаем зависимости Composer
 
