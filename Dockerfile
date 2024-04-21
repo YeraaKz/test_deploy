@@ -13,10 +13,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY symfony.conf /etc/nginx/sites-available/default
 
 # Копирование исходного кода приложения
-WORKDIR /var/www/symfony
-COPY . /var/www/symfony
+COPY ./ /var/www
+WORKDIR /var/www
 
 # Установка зависимостей через Composer
+RUN composer clear-cache
 RUN composer install --no-dev --optimize-autoloader
 
 # Настройка прав доступа
