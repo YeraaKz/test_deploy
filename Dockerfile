@@ -18,15 +18,12 @@ ENV SKIP_COMPOSER 1
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Устанавливаем Composer
-RUN rm -f composer.lock
-RUN composer install --no-dev --optimize-autoloader -vvv
-
 
 # Копируем исходный код Symfony в контейнер
-COPY . /var/www/symfony
+COPY . /var/www
 WORKDIR /var/www
 
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader
 # Устанавливаем зависимости Composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
